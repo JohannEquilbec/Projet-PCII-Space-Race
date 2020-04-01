@@ -13,7 +13,7 @@ import view.ThreadAff;
  */
 public class Main {
 	/**
-	 * Crée {@link Etat}, {@link Affichage} et {@link Control}
+	 * CrÃ©e {@link Etat}, {@link Affichage} et {@link Control}
 	 * @param args les arguments du main
 	 */
 	public static void main(String[] args) {
@@ -39,5 +39,6 @@ public class Main {
 		(new Avancer(affi, etat)).start();
 		(new Accelerer(affi, etat)).start();
 		(new DiminuerTemps(etat)).start();
+		//(new Checkpoint(affi, etat)).start();
 	}
 }
