@@ -16,12 +16,12 @@ public class Piste {
 	//Liste des points qui constituent la route
 	private ArrayList<Point> ligne = new ArrayList<Point>();
 	
-	//Liste des décors sur la route
+	//Liste des dÃ©cors sur la route
 	private ArrayList<Decors> decors = new ArrayList<>();
 	
 	private static final Random rand = new Random();
 	
-	//Plus la valeur est petite, plus il y a de décors
+	//Plus la valeur est petite, plus il y a de dÃ©cors
 	private static final int TauxApparitionDecors = 100;
 	
 	//Position de la pointe de la piste
@@ -31,7 +31,7 @@ public class Piste {
 	//Avancement
 	private int position = 0;
 	
-	//Caractéristiques de la route
+	//CaractÃ©ristiques de la route
 	private int longueur_segment = 300;
 	private int tournant = 200;
 	
@@ -39,24 +39,24 @@ public class Piste {
 	private Point prev_line_position_raw = new Point(0,0);
 	
 	/**
-	 * Crée la ligne aléatoirement
+	 * CrÃ©e la ligne alÃ©atoirement
 	 */
 	public Piste() {
 		addPoint();
 	}
 	
 	/**
-	 * Ajoute un décors
+	 * Ajoute un dÃ©cors
 	 */
 	public void addDecors() {
 		decors.add(new Decors(this, position - Affichage.HAUT/3, positionPiste(Affichage.HORIZON)));
 	}
 	
 	/**
-	 * Ajoute un point à la ligne
+	 * Ajoute un point Ã  la ligne
 	 */
 	private void addPoint() {
-		//Définie la curvature
+		//DÃ©finie la curvature
 		x_current += rand.nextInt(tournant) - tournant/2;
 		if (x_current < 50) {
 			x_current=50;
@@ -64,13 +64,13 @@ public class Piste {
 			x_current= Affichage.LARG - (Affichage.LARG/100 + Affichage.HAUT*17/60);
 		}
 		ligne.add(new Point(x_current, y_current));
-		//Définie la longueur du prochain segment
+		//DÃ©finie la longueur du prochain segment
 		y_current -= rand.nextInt(longueur_segment/3) + longueur_segment;
 	}
 	
 	/**
 	 * Revoie les points visibles dans la fenetre et les avancent suivant la position
-	 * @return les points visibles dans la fenetre (sans décalage pour qu'ils soient centrés)
+	 * @return les points visibles dans la fenetre (sans dÃ©calage pour qu'ils soient centrÃ©s)
 	 */
 	public ArrayList<Point> getRawParcours() {
 		ArrayList<Point> ligne_visible = new ArrayList<Point>();
@@ -96,9 +96,9 @@ public class Piste {
 	}
 	
 	/**
-	 * Décale le parcours pour que la piste soit à l'horizon au centre
-	 * @param ligne_visible la ligne à décaler
-	 * @return la piste décalée
+	 * DÃ©cale le parcours pour que la piste soit Ã  l'horizon au centre
+	 * @param ligne_visible la ligne Ã  dÃ©caler
+	 * @return la piste dÃ©calÃ©e
 	 */
 	public ArrayList<Point> decaleParcours(ArrayList<Point> ligne_visible) {
 		int centre = positionPiste(Affichage.HORIZON, true);
@@ -109,7 +109,7 @@ public class Piste {
 	}
 	
 	/**
-	 * Renvoi le parcours tel qu'il est vu à l'écran
+	 * Renvoi le parcours tel qu'il est vu Ã  l'Ã©cran
 	 * @return
 	 */
 	public ArrayList<Point> getParcours() {
@@ -135,7 +135,7 @@ public class Piste {
 	public void avance(Etat etat) {
 		this.position += etat.vaisseau.vitesse/10;
 		
-		//Génération de décors aléatoire
+		//GÃ©nÃ©ration de dÃ©cors alÃ©atoire
 		if (rand.nextInt(TauxApparitionDecors) == 0) {
 			addDecors();
 		}
@@ -171,15 +171,15 @@ public class Piste {
 			Point i0 = new Point(parcours.get(i).x, parcours.get(i).y);
 			Point i1 = new Point(parcours.get(i+1).x, parcours.get(i+1).y);
 			
-			//Caclule la partie gauche de la piste à afficher
+			//Caclule la partie gauche de la piste Ã  afficher
 			int x1_haut = i0.x - (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
 			int x1_bas = i1.x - (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
 			
-			//Caclule la partie droite de la piste à afficher
+			//Caclule la partie droite de la piste Ã  afficher
 			int x2_haut = i0.x + (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
 			int x2_bas = i1.x + (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
 			
-			//Trace les pavés
+			//Trace les pavÃ©s
 			g.setColor(Color.LIGHT_GRAY);
 			g.setStroke(new BasicStroke(1));
 			int[] x = {x1_haut, x1_bas, x2_bas, x2_haut};
@@ -201,16 +201,82 @@ public class Piste {
 			g.drawLine(haut.x, haut.y, bas.x, bas.y);
 		}
 		
-		//Test sur la position de la piste à l'horizon (debug)
+		//Test sur la position de la piste Ã  l'horizon (debug)
 		/*g.setStroke(new BasicStroke(2));
 		g.setColor(Color.RED);
 		int x = Affichage.HORIZON;
 		g.drawOval(positionTaillePiste(x)[0]-5, x-5, 10, 10);
 		*/
+		
+	////////////// DEBUT CHECKPOINT ///////////////////	
+
+	/**
+	 * Affiche un court message a l'ecran, avertissant de l'arrivee du checkpoint
+	 * Dessine le debut du checkpoint, a l'horizon
+	 * @throws InterruptedException 
+	 */
+	public void messageCheckpoint() {
+		System.out.println("Attention au checkpoint");
+		afficheMessage = true;
+	}
+
+
+	public void debutCheckpoint() {
+		if (this.position >= prochainCheckpoint) {
+			messageCheckpoint();
+			// setCheckTrue();
+			setWaitTrue();
+		}
+	}
+
+	/**
+	 * Definit qu'un checkpoint doit apparaitre a l'ecran
+	 */
+	public void setCheckTrue() {
+		System.out.println("Changement de valeur");
+		isCheckpoint = true;
+	}
+
+
+	public void setWaitTrue() {
+		waitCheck = true;
+	}
+
+	/**
+	 * Dessine la ligne de checkpoint qui va suivre la route
+	 * 
+	 * @param g
+	 */
+	public void dessineCheckpoint(Graphics2D g) {
+		afficheMessage = false;
+		System.out.println("Dessin de ligne checkpoint");
+		ArrayList<Point> parcours = etat.piste.getParcours();
+		g.setColor(Color.ORANGE);
+		g.setStroke(new BasicStroke(7));
+		for (int i = 0; i < parcours.size() - 1; i++) {
+			int x_decale_haut = parcours.get(i).x + Affichage.LARG/100 + (parcours.get(i).y - Affichage.HAUT/3)/2;
+			// int x_decale_bas = parcours.get(i+1).x + Affichage.LARG/100 + (parcours.get(i+1).y - Affichage.HAUT/3)/2;
+			g.drawLine(parcours.get(i).x, parcours.get(i).y, x_decale_haut, parcours.get(i).y);
+		}
+		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(4));
+	}
+
+	/*
+	 * Definit ou sera le prochain checkpoint rencontre
+	 */
+	public void nouveauCheckpoint() {
+		prochainCheckpoint += valDistanceCheckpoint * multDistance;
+	}
+
+
+	//////////// FIN CHECKPOINT /////////////////
+		
+	
 	}
 	
 	/**
-	 * Dessine les décors
+	 * Dessine les dÃ©cors
 	 * @param g {@link Graphics2D}
 	 */
 	public void drawDecors(Graphics2D g) {	
@@ -255,8 +321,8 @@ public class Piste {
 	}
 	
 	/**
-	 * Calcule la position de la piste au y donné (tel qu'affiché)
-	 * @param y l'endoit où regarder la position de la piste
+	 * Calcule la position de la piste au y donnÃ© (tel qu'affichÃ©)
+	 * @param y l'endoit oÃ¹ regarder la position de la piste
 	 * @return la position x de la piste
 	 */
 	public int positionPiste(int y) {
@@ -277,9 +343,9 @@ public class Piste {
 	}
 	
 	/**
-	 * Calcule la position de la piste au y donné
-	 * @param y l'endoit où regarder la position de la piste
-	 * @param raw si on doit prendre en compte le décalage centrer
+	 * Calcule la position de la piste au y donnÃ©
+	 * @param y l'endoit oÃ¹ regarder la position de la piste
+	 * @param raw si on doit prendre en compte le dÃ©calage centrer
 	 * @return la position x de la piste
 	 */
 	private int positionPiste(int y, boolean raw) {
@@ -308,12 +374,12 @@ public class Piste {
 	}
 	
 	/**
-	 * Calcule la taille de la piste au y donné
-	 * @param y le y où calculer la taille
+	 * Calcule la taille de la piste au y donnÃ©
+	 * @param y le y oÃ¹ calculer la taille
 	 * @return la taille de la piste
 	 */
 	public int taillePiste(int y) {
-		//TODO sur-évalué de 1/3 (d'où le * 2/3)
+		//TODO sur-Ã©valuÃ© de 1/3 (d'oÃ¹ le * 2/3)
 		return (Affichage.LARG/100 + (y - Affichage.HAUT/3)/2) * 2 /3;
 	}
 }
