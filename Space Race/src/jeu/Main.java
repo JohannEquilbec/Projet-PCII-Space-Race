@@ -12,9 +12,8 @@ import view.ThreadAff;
  * Main du programme
  */
 public class Main {
-	
 	/**
-	 * Cree {@link Etat}, {@link Affichage} et {@link Control}
+	 * Crée {@link Etat}, {@link Affichage} et {@link Control}
 	 * @param args les arguments du main
 	 */
 	public static void main(String[] args) {
@@ -22,22 +21,23 @@ public class Main {
 		JFrame fenetre = Fenetre.newJFrame();
 		Etat etat = new Etat();
 		Affichage affichage = new Affichage(etat);
-		//new ControlKey(affichage, etat);
-		//affichage.setFocusable(true);
+		
 		//Ajoute la vue
 		fenetre.add(affichage);
 		
+		//Assembler
+		fenetre.pack();
+		
+		//Ajoute les controles
 		new ControlKey(fenetre, etat);
 		
 		ThreadAff affi = new ThreadAff(affichage, etat);
 		etat.setThreadAff(affi);
+		
+		//Lancement des threads
 		affi.start();
 		(new Avancer(affi, etat)).start();
 		(new Accelerer(affi, etat)).start();
 		(new DiminuerTemps(etat)).start();
-		(new Checkpoint(affi, etat)).start();
-		
-		//Assembler
-		fenetre.pack();
 	}
 }
