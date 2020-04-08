@@ -38,6 +38,16 @@ public class Piste {
 	private Point prev_line_position = new Point(0,0);
 	private Point prev_line_position_raw = new Point(0,0);
 	
+	//Variables pour les checkpoints
+	public int valDistanceCheckpoint = 6000; // Chaque checkpoint sera au moins a cette valeur de distance, multiplie par multDistance
+	public int prochainCheckpoint = 200; // Le prochain checkpoint se trouve dans X pixels
+	public double multDistance = 1.4;  // Pour creer une courbe de progression de plus en plus dure, j'adapterai la valeur en fonction des essais
+
+	//public boolean checkFin = false;
+	public boolean waitCheck = false; // Pour ne pas reboucler debutCheckpoint dans le Thread
+	public boolean isCheckpoint = false; // Si un checkpoint doit apparaitre ou non
+	public boolean afficheMessage = false; // Si on affiche le message de prevention a l'ecran
+	
 	/**
 	 * Crée la ligne aléatoirement
 	 */
@@ -200,6 +210,7 @@ public class Piste {
 			Point bas = Etat.intersection(i0.x, i0.y, i1.x, i1.y, 0, i1.y + height_difference, 100, i1.y + height_difference);
 			g.drawLine(haut.x, haut.y, bas.x, bas.y);
 		}
+	}
 		
 		//Test sur la position de la piste à l'horizon (debug)
 		/*g.setStroke(new BasicStroke(2));
@@ -250,7 +261,7 @@ public class Piste {
 	public void dessineCheckpoint(Graphics2D g) {
 		afficheMessage = false;
 		System.out.println("Dessin de ligne checkpoint");
-		ArrayList<Point> parcours = etat.piste.getParcours();
+		ArrayList<Point> parcours = getParcours();
 		g.setColor(Color.ORANGE);
 		g.setStroke(new BasicStroke(7));
 		for (int i = 0; i < parcours.size() - 1; i++) {
@@ -272,8 +283,6 @@ public class Piste {
 
 	//////////// FIN CHECKPOINT /////////////////
 		
-	
-	}
 	
 	/**
 	 * Dessine les décors
@@ -383,3 +392,4 @@ public class Piste {
 		return (Affichage.LARG/100 + (y - Affichage.HAUT/3)/2) * 2 /3;
 	}
 }
+
