@@ -24,8 +24,8 @@ public class Affichage extends JPanel {
 	public Random rand = new Random();
 	
 	//Constantes
-	public final static int LARG = fullscreen ? screenSize.width : 1000;
-	public final static int HAUT = fullscreen ? screenSize.height : 1000;
+	public final static int LARG = 1080; // fullscreen ? screenSize.width : 1000;
+	public final static int HAUT = 920; //fullscreen ? screenSize.height : 1000;
 	public final static int DIAGO = (int) Math.sqrt(Math.pow(Affichage.HAUT, 2) + Math.pow(Affichage.LARG, 2));
 	public final static int SOL = HAUT*9/10;
 	public final static int HORIZON = HAUT/3;
@@ -113,19 +113,28 @@ public class Affichage extends JPanel {
 	}
 	
 	/**
-	 * Dessine les traits pour faire un effet d'accéleration
+	 * Dessine le message preventif
+	 * @param g {@link Graphics2D}
+	 */
+	public void attentionCheckpoint(Graphics2D g) {
+	    	g.setFont(new Font("TimesRoman", Font.PLAIN + 1, (LARG + HAUT) / 100));
+	    	g.drawString("CHECKPOINT !", LARG / 2, (LARG + HAUT) / 25);
+	}
+	
+	/**
+	 * Dessine les traits pour faire un effet d'accÃ©leration
 	 * @param g {@link Graphics2D}
 	 */
 	public void drawTraitAcceleration(Graphics2D g) {
-		//Affiche les traits autour de l'écran pour le boost
+		//Affiche les traits autour de l'Ã©cran pour le boost
 		int vitesse = etat.vaisseau.vitesse;
 		
 		g.setColor(new Color(255, 255, 255, etat.vaisseau.isBoost() ? 250 : 125));
 		g.setStroke(new BasicStroke(6));
 		
-		//On choisit à partir de quelle vitesse on affiche les traits
+		//On choisit Ã  partir de quelle vitesse on affiche les traits
 		int pallier_pour_trait = 50;
-		//On choisit le nombre de trait à afficher
+		//On choisit le nombre de trait Ã  afficher
 		int nombre_trait = 0;
 		if (etat.vaisseau.isBoost()) {
 			nombre_trait = (vitesse)/15;
@@ -133,18 +142,18 @@ public class Affichage extends JPanel {
 			nombre_trait = (vitesse - pallier_pour_trait)/20;
 		}
 		for (int i = 0; i < nombre_trait; i++) {
-			//Les coordonnées de début de la ligne
+			//Les coordonnÃ©es de dÃ©but de la ligne
 			int x=0;
 			int y=0;
 			Point p = null;
 			int type_trait = rand.nextInt(4);
-			//Défini le type de trait : venant d'en haut, d'en bas, de droite ou de gauche
+			//DÃ©fini le type de trait : venant d'en haut, d'en bas, de droite ou de gauche
 			
 			if (type_trait == 0) {
 				//La ligne part d'en haut
 				x = rand.nextInt(Affichage.LARG);
 				y = 0;
-				//Défini où la ligne s'arrete en y
+				//DÃ©fini oÃ¹ la ligne s'arrete en y
 				int y_inter = rand.nextInt(Affichage.HAUT/4);
 				p = Etat.intersection(x, y, Affichage.LARG/2, Affichage.HAUT/3, 0, y_inter, 100, y_inter);
 				
@@ -152,7 +161,7 @@ public class Affichage extends JPanel {
 				//La ligne part de la gauche
 				x = 0;
 				y = rand.nextInt(Affichage.HAUT);
-				//Défini où la ligne s'arrete en x
+				//DÃ©fini oÃ¹ la ligne s'arrete en x
 				int x_inter = rand.nextInt(Affichage.LARG/4);
 				p = Etat.intersection(x, y, Affichage.LARG/2, Affichage.HAUT/3, x_inter, 0, x_inter, 100);
 				
@@ -160,7 +169,7 @@ public class Affichage extends JPanel {
 				//La ligne part d'en bas
 				x = rand.nextInt(Affichage.LARG);
 				y = Affichage.HAUT;
-				//Défini où la ligne s'arrete en y
+				//DÃ©fini oÃ¹ la ligne s'arrete en y
 				int y_inter = rand.nextInt(Affichage.HAUT*2/6) + Affichage.HAUT*4/6;
 				p = Etat.intersection(x, y, Affichage.LARG/2, Affichage.HAUT/3, 0, y_inter, 100, y_inter);
 				
@@ -168,7 +177,7 @@ public class Affichage extends JPanel {
 				//La ligne part de la droite
 				x = Affichage.LARG;
 				y = rand.nextInt(Affichage.HAUT);
-				//Défini où la ligne s'arrete en x
+				//DÃ©fini oÃ¹ la ligne s'arrete en x
 				int x_inter = rand.nextInt(Affichage.LARG/4) + Affichage.LARG*3/4;
 				p = Etat.intersection(x, y, Affichage.LARG/2, Affichage.HAUT/3, x_inter, 0, x_inter, 100);
 			}
@@ -201,6 +210,14 @@ public class Affichage extends JPanel {
 		drawTraitAcceleration(g);
 		
 		etatTexte(g);
+		
+		if (etat.piste.afficheMessage == true) {
+    		attentionCheckpoint(g);
+    	}
+		
+		if (etat.piste.isCheckpoint == true) {
+	    	etat.piste.dessineCheckpoint(g);
+	    	}
 		
 		if (etat.isPause()) {
 			etat.menuActuel.draw(g);
