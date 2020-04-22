@@ -260,15 +260,26 @@ public class Piste {
 	 */
 	public void dessineCheckpoint(Graphics2D g) {
 		afficheMessage = false;
-		System.out.println("Dessin de ligne checkpoint");
+		//System.out.println("Dessin de ligne checkpoint");
 		ArrayList<Point> parcours = getParcours();
+		System.out.println(parcours.size());
 		g.setColor(Color.ORANGE);
 		g.setStroke(new BasicStroke(7));
-		for (int i = 0; i < parcours.size() - 1; i++) {
-			int x_decale_haut = parcours.get(i).x + Affichage.LARG/100 + (parcours.get(i).y - Affichage.HAUT/3)/2;
-			// int x_decale_bas = parcours.get(i+1).x + Affichage.LARG/100 + (parcours.get(i+1).y - Affichage.HAUT/3)/2;
-			g.drawLine(parcours.get(i).x, parcours.get(i).y, x_decale_haut, parcours.get(i).y);
-		}
+		Point i0 = new Point(parcours.get(4).x, parcours.get(4).y);
+		Point i1 = new Point(parcours.get(4 + 1).x, parcours.get(4 + 1).y);
+		
+		//Caclule la partie gauche de la piste à afficher
+		int x1_haut = i0.x - (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
+		int x1_bas = i1.x - (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
+		
+		//Caclule la partie droite de la piste à afficher
+		int x2_haut = i0.x + (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
+		int x2_bas = i1.x + (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
+		
+		g.drawLine(x1_haut, i0.y , x2_haut, i0.y);
+		
+		//firstCheckpoint = false;
+	
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(4));
 	}
