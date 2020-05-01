@@ -4,7 +4,6 @@ import modele.Etat;
 import view.ThreadAff;
 
 public class Checkpoint extends Thread {
-	@SuppressWarnings("unused")
 	private ThreadAff affi;
 	private Etat etat;
 
@@ -15,7 +14,7 @@ public class Checkpoint extends Thread {
 	 */
 	public Checkpoint(ThreadAff tAffi, Etat et) {
 		this.etat = et;
-		this.affi = tAffi;
+		this.setAffi(tAffi);
 	}
 
 	/*
@@ -37,12 +36,15 @@ public class Checkpoint extends Thread {
 			if (etat.piste.afficheMessage == true) {
 				try {
 					Thread.sleep(3000);
-					//etat.piste.afficheMessage = false;
+					etat.piste.afficheMessage = false;
 					try {
 						etat.piste.isCheckpoint = true;
-						Thread.sleep(5000);
+						Thread.sleep(6000);
 						etat.piste.waitCheck = false;
 						etat.piste.isCheckpoint = false;
+						etat.piste.firstCheckpoint = true;
+						etat.piste.checked = false;
+						etat.piste.reinitialiseValeurs();
 						etat.piste.nouveauCheckpoint();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -58,5 +60,13 @@ public class Checkpoint extends Thread {
 			}
 
 		}
+	}
+
+	public ThreadAff getAffi() {
+		return affi;
+	}
+
+	public void setAffi(ThreadAff affi) {
+		this.affi = affi;
 	}
 }
