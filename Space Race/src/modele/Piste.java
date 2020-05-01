@@ -43,10 +43,23 @@ public class Piste {
 	public int prochainCheckpoint = 200; // Le prochain checkpoint se trouve dans X pixels
 	public double multDistance = 1.4;  // Pour creer une courbe de progression de plus en plus dure, j'adapterai la valeur en fonction des essais
 
+	public int vieRecuperee = 50;
+	
+	//Variables de base pour la création des checkpoints
+	public int posBaseAx = Affichage.LARG/2 - 10; //Abscisse du 1er point
+	public int posBaseAy = Affichage.HAUT/3;      //Ordonnée du 1er point
+	public int posBaseBx = Affichage.LARG/2 + 10; //Abscisse du 2ème point
+	public int posBaseBy = Affichage.HAUT/3;      //ordonnée du 2ème point
+	
+	public int position1 = 0;
+	public int position2 = 0;
+	
 	//public boolean checkFin = false;
 	public boolean waitCheck = false; // Pour ne pas reboucler debutCheckpoint dans le Thread
 	public boolean isCheckpoint = false; // Si un checkpoint doit apparaitre ou non
 	public boolean afficheMessage = false; // Si on affiche le message de prevention a l'ecran
+	public boolean firstCheckpoint = true; // Pour dessiner la première apparition du Checkpoint
+	public boolean checked = false; // True si le checkpoint courant a été collecté, false par défaut
 	
 	/**
 	 * Crée la ligne aléatoirement
@@ -227,7 +240,6 @@ public class Piste {
 	 * @throws InterruptedException 
 	 */
 	public void messageCheckpoint() {
-		System.out.println("Attention au checkpoint");
 		afficheMessage = true;
 	}
 
@@ -235,7 +247,7 @@ public class Piste {
 	public void debutCheckpoint() {
 		if (this.position >= prochainCheckpoint) {
 			messageCheckpoint();
-			// setCheckTrue();
+			//setCheckTrue();
 			setWaitTrue();
 		}
 	}
@@ -260,28 +272,49 @@ public class Piste {
 	 */
 	public void dessineCheckpoint(Graphics2D g) {
 		afficheMessage = false;
-		//System.out.println("Dessin de ligne checkpoint");
-		ArrayList<Point> parcours = getParcours();
-		System.out.println(parcours.size());
-		g.setColor(Color.ORANGE);
-		g.setStroke(new BasicStroke(7));
-		Point i0 = new Point(parcours.get(4).x, parcours.get(4).y);
-		Point i1 = new Point(parcours.get(4 + 1).x, parcours.get(4 + 1).y);
+		g.setColor(Color.RED);
+		g.setStroke(new BasicStroke(8));
 		
-		//Caclule la partie gauche de la piste à afficher
-		int x1_haut = i0.x - (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
-		int x1_bas = i1.x - (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
+		if(firstCheckpoint == true) {
+			g.drawLine(posBaseAx, posBaseAy, posBaseBx, posBaseBy);
+			firstCheckpoint = false;
+			position1 = position;
+		} else {
+			if (posBaseAx >= (Affichage.LARG/2) - 130) {
+				posBaseAx -= 2;
+			}
+			if (posBaseBx <= (Affichage.LARG/2) + 130) {
+				posBaseBx += 2;
+			}
+			
+			position2 = position1;
+			position1 = position;
+			posBaseAy += (position1 - position2);
+			posBaseBy += (position1 - position2);
+			
+			g.drawLine(posBaseAx, posBaseAy, posBaseBx, posBaseBy);
+		}
 		
-		//Caclule la partie droite de la piste à afficher
-		int x2_haut = i0.x + (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
-		int x2_bas = i1.x + (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
-		
-		g.drawLine(x1_haut, i0.y , x2_haut, i0.y);
-		
-		//firstCheckpoint = false;
-	
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(4));
+	}
+	
+	public void checkpointCrossed(Etat etat) {
+		etat.vaisseau.vie += vieRecuperee;
+	}
+	
+	public void reinitialiseValeurs() {
+		posBaseAx = Affichage.LARG/2 - 10;
+		posBaseAy = Affichage.HAUT/3;
+		posBaseBx = Affichage.LARG/2 + 10;
+		posBaseBy = Affichage.HAUT/3;
+	}
+	
+	public void crossCheckpoint(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Etat etat) {
+		if (etat.vaisseau.y >= (Affichage.HAUT/2) && (((x3 - x1)*(y2 - y1)-(y3 - y1)*(x2 - x1))*((x4 - x1)*(y2 - y1)-(y4 - y1)*(x2 - x1))) <= 0 && (((x1 - x3)*(y4 - y3)-(y1 - y3)*(x4 - x3))*((x2 - x3)*(y2 - y3)-(y2 - y3)*(x4 - x3))) <= 0 ) {
+			checkpointCrossed(etat);
+			checked = true;
+		}
 	}
 
 	/*
@@ -290,7 +323,6 @@ public class Piste {
 	public void nouveauCheckpoint() {
 		prochainCheckpoint += valDistanceCheckpoint * multDistance;
 	}
-
 
 	//////////// FIN CHECKPOINT /////////////////
 		
