@@ -18,8 +18,8 @@ public class Menu {
 	
 	/**
 	 * Construit le menu
-	 * @param nom le nom du menu (utilisé pour définir l'action à  faire)
-	 * @param choix la liste de proposition à  afficher
+	 * @param nom le nom du menu (utilisÃ© pour dÃ©finir l'action Ã Â  faire)
+	 * @param choix la liste de proposition Ã Â  afficher
 	 */
 	public Menu(String nom, String[] choix, Menu menuPa) {
 		this.nomMenu = nom;
@@ -28,7 +28,7 @@ public class Menu {
 	}
 	
 	/**
-	 * Change d'un cran la sélection si haut ou bas
+	 * Change d'un cran la sÃ©lection si haut ou bas
 	 * @param dir
 	 */
 	public void choisir(DIR dir) {
@@ -50,14 +50,14 @@ public class Menu {
 	}
 	
 	/**
-	 * Sélctionne une option dans le menu
-	 * @param etat l'état (pour faire des modifications dessus)
+	 * SÃ©lctionne une option dans le menu
+	 * @param etat l'Ã©tat (pour faire des modifications dessus)
 	 */
 	public void choose(Etat etat) {
 		String selection = choixMenu[choix_menu];
 		
 		//Choix "universels" : la meme action peut importe le menu en cours
-		//Si on selectionne Retour, on repart au menu précédant
+		//Si on selectionne Retour, on repart au menu prÃ©cÃ©dant
 		if (selection == "Retour") {
 			etat.changeMenuActuel(menuParent);
 		//Si on selectionne Reprendre, le jeu reprend
@@ -68,20 +68,25 @@ public class Menu {
 			etat.quit = true;
 		}
 		
-		//Choix spécifiques
+		//Choix spÃ©cifiques
 		if (nomMenu == "MenuPause") {
 			if (selection == "Options") {
 				etat.changeMenuActuel(etat.menuOption);
 			} 
 		} else if (nomMenu == "MenuOption") {
 			if (selection == "Son") {
-				
+
 			} else if (selection == "Skins") {
 				etat.changeMenuActuel(etat.menuSkin);
+			} else if (selection == "DifficultÃ©") {
+				etat.changeMenuActuel(etat.menuDifficulte);
 			}
 		} else if (nomMenu == "MenuSkin") {
 			etat.vaisseau.setSkin(choixMenu[choix_menu]);
+		} else if (nomMenu == "MenuDifficultÃ©") {
+			etat.piste.changeDifficulte(choixMenu[choix_menu]);;
 		}
+
 	}
 	
 	/**
@@ -102,12 +107,12 @@ public class Menu {
 		int size_char = (Affichage.LARG + Affichage.HAUT)/40;
 		
 		for (int i = 0; i < choixMenu.length; i++) {
-			//Si la sélection est ici, on dessine un rectangle
+			//Si la sÃ©lection est ici, on dessine un rectangle
 			if (i == choix_menu) {
 				g.setColor(Color.GRAY);
 				g.fillRect(x, y - size_char + (i * Affichage.HAUT / 10) + size_char/5, size_char * choixMenu[i].length() * 3/5, size_char);
 			}
-			//On écrit la ligne du menu
+			//On Ã©crit la ligne du menu
 			g.setColor(Color.BLACK);
 			g.drawString(choixMenu[i], x, y + (i * Affichage.HAUT / 10));
 		}
