@@ -15,7 +15,7 @@ public class Etat {
 	private boolean pause = false;
 	public boolean quit = false;
 
-	//DÈfini le mode de vision du jeu
+	//D√©fini le mode de vision du jeu
 	public static final boolean centrer = true;
 
 	//Listes des options dans les menus
@@ -27,6 +27,9 @@ public class Etat {
 
 	private String[] listeMenuSkin = {"Gris","Bleu","Vert","Rouge","Retour"};
 	public Menu menuSkin = new Menu("MenuSkin", listeMenuSkin, menuOption);
+	
+	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Retour"};
+	public Menu menuDifficulte = new Menu("MenuDifficult√©", listeMenuDifficulte, menuOption);
 
 	public Menu menuActuel = menuPause;
 
@@ -59,7 +62,7 @@ public class Etat {
 	/**
 	 * Transmet l'arret d'appui d'une touche directionnelle aux bons composants 
 	 * ({@link Menu} actuel si le jeu est en pause, {@link Vaisseau} sinon)
-	 * @param dir la direction appuyÈ
+	 * @param dir la direction appuy√©
 	 */
 	public void unselect(DIR dir) {
 		if (!pause) {
@@ -141,7 +144,7 @@ public class Etat {
 
 	/**
 	 * Change le menu actuellement en cours
-	 * @param next le menu suivant ‡ mettre en cours
+	 * @param next le menu suivant √† mettre en cours
 	 */
 	public void changeMenuActuel(Menu next) {
 		menuActuel.resetSelection();
