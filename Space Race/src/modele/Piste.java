@@ -39,9 +39,8 @@ public class Piste {
 	private Point prev_line_position_raw = new Point(0,0);
 	
 	//Variables pour les checkpoints
-	public int valDistanceCheckpoint = 6000; // Chaque checkpoint sera au moins a cette valeur de distance, multiplie par multDistance
-	public int prochainCheckpoint = 200; // Le prochain checkpoint se trouve dans X pixels
-	public double multDistance = 1.4;  // Pour creer une courbe de progression de plus en plus dure, j'adapterai la valeur en fonction des essais
+	public int prochainCheckpoint = 200; // Le prochain checkpoint se trouve dans X pixels multiplié par multDistance
+	public double multDistance = 1.8;  // Pour creer une courbe de progression de plus en plus dure
 
 	public int vieRecuperee = 50;
 	
@@ -157,12 +156,12 @@ public class Piste {
 	 */
 	public void avance(Etat etat) {
 		this.position += etat.vaisseau.vitesse/10;
-		
+
 		//Génération de décors aléatoire
 		if (rand.nextInt(TauxApparitionDecors) == 0) {
 			addDecors();
 		}
-		
+
 		for (Decors p : decors) {
 			if (!p.crash_into) {
 				//Test de collision en hauteur
@@ -177,6 +176,11 @@ public class Piste {
 					}
 				}
 			}
+		}
+
+		if (checked == false && isCheckpoint == true) {
+			crossCheckpoint(etat.vaisseau.x, etat.vaisseau.y, etat.vaisseau.x + Vaisseau.LARG, etat.vaisseau.y + Vaisseau.HAUT, posBaseAx, posBaseAy, posBaseBx, posBaseBy, etat);
+			//crossCheckpoint((Affichage.LARG/2) - 100, Affichage.HAUT - 150, (Affichage.LARG/2) + 100, Affichage.HAUT - 150, posBaseAx, posBaseAy, posBaseBx, posBaseBy, etat);
 		}
 	}
 	
@@ -299,8 +303,34 @@ public class Piste {
 		g.setStroke(new BasicStroke(4));
 	}
 	
-	public void checkpointCrossed(Etat etat) {
-		etat.vaisseau.vie += vieRecuperee;
+	public void crossCheckpoint(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Etat etat) {
+		if (etat.vaisseau.y >= (Affichage.HAUT/2) && (((x3 - x1)*(y2 - y1)-(y3 - y1)*(x2 - x1))*((x4 - x1)*(y2 - y1)-(y4 - y1)*(x2 - x1))) < 0 && (((x1 - x3)*(y4 - y3)-(y1 - y3)*(x4 - x3))*((x2 - x3)*(y4 - y3)-(y2 - y3)*(x4 - x3))) < 0) {
+			checkpointCrossed(etat);
+			checked = true;
+		}
+	}
+
+	public void changeDifficulte(String diff) {
+		if (diff == "Facile") {
+			setMultDistance(1.2);
+		}
+		if (diff == "Normal") {
+			setMultDistance(1.8);
+		}
+		if (diff == "Difficile") {
+			setMultDistance(5.0);
+		}
+	}
+	
+	public void setMultDistance(double multDistance) {
+		this.multDistance = multDistance;
+	}
+
+	/*
+	 * Definit ou sera le prochain checkpoint rencontre
+	 */
+	public void nouveauCheckpoint() {
+		prochainCheckpoint += prochainCheckpoint * multDistance;
 	}
 	
 	public void reinitialiseValeurs() {
@@ -308,20 +338,6 @@ public class Piste {
 		posBaseAy = Affichage.HAUT/3;
 		posBaseBx = Affichage.LARG/2 + 10;
 		posBaseBy = Affichage.HAUT/3;
-	}
-	
-	public void crossCheckpoint(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Etat etat) {
-		if (etat.vaisseau.y >= (Affichage.HAUT/2) && (((x3 - x1)*(y2 - y1)-(y3 - y1)*(x2 - x1))*((x4 - x1)*(y2 - y1)-(y4 - y1)*(x2 - x1))) <= 0 && (((x1 - x3)*(y4 - y3)-(y1 - y3)*(x4 - x3))*((x2 - x3)*(y2 - y3)-(y2 - y3)*(x4 - x3))) <= 0 ) {
-			checkpointCrossed(etat);
-			checked = true;
-		}
-	}
-
-	/*
-	 * Definit ou sera le prochain checkpoint rencontre
-	 */
-	public void nouveauCheckpoint() {
-		prochainCheckpoint += valDistanceCheckpoint * multDistance;
 	}
 
 	//////////// FIN CHECKPOINT /////////////////
