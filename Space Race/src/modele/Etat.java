@@ -27,7 +27,7 @@ public class Etat {
 	private String[] listeMenuOptionInit = {"Difficulte","Retour"};
 	public Menu menuOptionInit = new Menu("MenuOption", listeMenuOptionInit, menuInit);
 	
-	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Retour"};
+	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Démentiel", "Retour"};
 	public Menu menuDifficulte = new Menu("MenuDifficulte", listeMenuDifficulte, menuInit);
 	
 	
