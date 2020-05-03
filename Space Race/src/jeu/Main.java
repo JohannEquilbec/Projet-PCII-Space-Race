@@ -39,6 +39,6 @@ public class Main {
 		(new Avancer(affi, etat)).start();
 		(new Accelerer(affi, etat)).start();
 		(new DiminuerTemps(etat)).start();
-		//(new Checkpoint(affi, etat)).start();
+		(new Checkpoint(affi, etat)).start();
 	}
 }

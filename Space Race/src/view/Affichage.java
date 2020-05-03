@@ -24,8 +24,8 @@ public class Affichage extends JPanel {
 	public Random rand = new Random();
 	
 	//Constantes
-	public final static int LARG = 1080; // fullscreen ? screenSize.width : 1000;
-	public final static int HAUT = 920; //fullscreen ? screenSize.height : 1000;
+	public final static int LARG = fullscreen ? screenSize.width : 1000;
+	public final static int HAUT = fullscreen ? screenSize.height : 1000;
 	public final static int DIAGO = (int) Math.sqrt(Math.pow(Affichage.HAUT, 2) + Math.pow(Affichage.LARG, 2));
 	public final static int SOL = HAUT*9/10;
 	public final static int HORIZON = HAUT/3;
@@ -205,6 +205,10 @@ public class Affichage extends JPanel {
 		
 		etat.piste.drawDecors(g);
 		
+		if (etat.piste.isCheckpoint == true) {
+	    	etat.piste.dessineCheckpoint(g);
+	    }
+		
 		etat.vaisseau.drawVaisseau(g);
 		
 		drawTraitAcceleration(g);
@@ -214,10 +218,6 @@ public class Affichage extends JPanel {
 		if (etat.piste.afficheMessage == true) {
     		attentionCheckpoint(g);
     	}
-		
-		if (etat.piste.isCheckpoint == true) {
-	    	etat.piste.dessineCheckpoint(g);
-	    	}
 		
 		if (etat.isPause()) {
 			etat.menuActuel.draw(g);

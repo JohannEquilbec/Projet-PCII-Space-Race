@@ -37,18 +37,13 @@ public class Checkpoint extends Thread {
 				try {
 					Thread.sleep(3000);
 					etat.piste.afficheMessage = false;
-					try {
-						etat.piste.isCheckpoint = true;
-						Thread.sleep(6000);
-						etat.piste.waitCheck = false;
-						etat.piste.isCheckpoint = false;
-						etat.piste.firstCheckpoint = true;
-						etat.piste.checked = false;
-						etat.piste.reinitialiseValeurs();
-						etat.piste.nouveauCheckpoint();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					etat.piste.isCheckpoint = true;
+					Thread.sleep(6000);
+					etat.piste.waitCheck = false;
+					etat.piste.isCheckpoint = false;
+					etat.piste.checked = false;
+					etat.piste.reinitialiseValeurs();
+					etat.piste.nouveauCheckpoint();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
