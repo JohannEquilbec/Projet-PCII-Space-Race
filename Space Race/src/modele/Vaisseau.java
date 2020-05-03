@@ -41,7 +41,7 @@ public class Vaisseau {
 	public int crash = 0;
 	public boolean boost = false;
 	public boolean brake = false;
-	public int vie = 100;
+	public int vie;
 	
 	/**
 	 * Constructeur du vaisseau
@@ -49,6 +49,12 @@ public class Vaisseau {
 	 */
 	public Vaisseau(Etat et) {
 		etat = et;
+		vie = 3;
+		ThreadX = null;      
+		ThreadY = null;
+		vaVersX = false; 
+		vaVersY = false;
+		vitesse = 0;
 	}
 	
 	/**
@@ -56,6 +62,7 @@ public class Vaisseau {
 	 */
 	public void accelere() {
 		//Premier calcul utilisé, qui marchait magiquement avec les bonnes valeurs
+		// /!\ MAUVAIS CALCUL /!\
 		//vitesse_atteignable = Affichage.DIAGO/etat.piste.distancePiste(x, y + HAUT) * vitesse_max;
 		
 		vitesse_atteignable = (int)(Math.pow((1 - (float)etat.piste.distancePiste(x, y)/Affichage.DIAGO),2) * vitesse_max);

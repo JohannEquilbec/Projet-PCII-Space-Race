@@ -8,33 +8,32 @@ import javax.swing.JFrame;
 /**
  * Crée une fenetre défaut
  */
-public class Fenetre {
+public class Fenetre extends JFrame {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Crée une fenetre par défaut
-	 * @return renvoie la fenetre defaut crée {@link JFrame}
 	 */
-	public static JFrame newJFrame() {
+	public Fenetre() {
 		//Nouvelle fenetre
-		JFrame fenetre = new JFrame("Race");
+		super("Race");
 		
 		//Vrai plein-écran
 		if (Affichage.fullscreen) {
-			fenetre.setUndecorated(true);
+			this.setUndecorated(true);
 		}
 		
 		//Cache le curseur
-		fenetre.setCursor(fenetre.getToolkit().createCustomCursor(
+		this.setCursor(this.getToolkit().createCustomCursor(
 				new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB),
 				new Point(), null));
 		
 		//Définir comportement face à  fermeture
-		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Assembler
-		fenetre.pack();
+		this.pack();
 		//Rendre visible
-		fenetre.setVisible(true);
-		return fenetre;
+		this.setVisible(true);
 	}
 }

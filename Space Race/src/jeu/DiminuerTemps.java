@@ -23,8 +23,8 @@ public class DiminuerTemps extends Thread {
 	 */
 	@Override
 	public void run() {
-		while (!etat.isPerdu()) {
-			if (!etat.isPause()) {
+		while (!etat.isQuit()) {
+			if (!etat.isPause()  && !etat.isGameOver()) {
 				etat.vaisseau.perdVie();
 			}
 			try {
@@ -34,5 +34,6 @@ public class DiminuerTemps extends Thread {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 }

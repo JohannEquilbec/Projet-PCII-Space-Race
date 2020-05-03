@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import view.Affichage;
 import modele.Etat;
 
 /**
@@ -110,6 +111,7 @@ public class Affichage extends JPanel {
 		g.drawString("GAME OVER", LARG/2-(LARG+HAUT)/9, HAUT/3);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, (LARG+HAUT)/40));
 		g.drawString("Score : "+Integer.toString(etat.piste.getPosition()/100), LARG/2-(LARG+HAUT)/15, HAUT/3+(LARG+HAUT)/20);
+		g.drawString("Appuyez sur ECHAP pour revenir au menu", LARG/2-(LARG+HAUT)/5, HAUT/3+(LARG+HAUT)/20 + (LARG+HAUT)/20);
 	}
 	
 	/**
@@ -118,7 +120,7 @@ public class Affichage extends JPanel {
 	 */
 	public void attentionCheckpoint(Graphics2D g) {
 	    	g.setFont(new Font("TimesRoman", Font.PLAIN + 1, (LARG + HAUT) / 100));
-	    	g.drawString("CHECKPOINT !", LARG / 2, (LARG + HAUT) / 25);
+	    	g.drawString("CHECKPOINT !", centrerTexte(g, "CHECKPOINT !"), (LARG + HAUT) / 25);
 	}
 	
 	/**
@@ -185,40 +187,69 @@ public class Affichage extends JPanel {
 		}
 	}
 	
+	public static int centrerTexte(Graphics g, String str) {
+		int taille = g.getFont().getSize();
+		return Affichage.LARG/2 - taille * str.length()/4;
+	}
+	
+	public void drawLogo(Graphics g) {
+		g.setColor(Color.BLACK);
+		int start = 250;
+		int end = 200;
+		for (int i = start; i >= end; i--) {
+			if (i == end) {
+				g.setColor(new Color(150, 200, 200));
+			}
+			drawLogoSize(g, i);
+		}
+	}
+	
+	public void drawLogoSize(Graphics g, float size) {
+		float tailleTexte = (LARG+HAUT)/(size/10);
+		g.setFont(new Font("TimesRoman", Font.PLAIN+1, (int)tailleTexte));
+		String str = "Space Race";
+		g.drawString(str, centrerTexte(g, str), (int)(Affichage.HAUT/3 - size/50));
+	}
+	
 	@Override
 	public void paint(Graphics g2) {
 		super.paint(g2);
 		Graphics2D g = (Graphics2D)g2;
 		
-		//Herbe
-		g.setColor(new Color(50, 200, 50));
-		g.fillRect(0, HAUT/3, LARG, HAUT);
-		
-		etat.piste.drawPiste(g);
-		
-		background(g);
-		
-		//Horizon
-		g.setStroke(new BasicStroke(1));
-		g.setColor(Color.BLACK);
-		g.drawLine(0, HAUT/3, LARG, HAUT/3);
-		
-		etat.piste.drawDecors(g);
-		
-		if (etat.piste.isCheckpoint == true) {
-	    	etat.piste.dessineCheckpoint(g);
-	    }
-		
-		etat.vaisseau.drawVaisseau(g);
-		
-		drawTraitAcceleration(g);
-		
-		etatTexte(g);
-		
-		if (etat.piste.afficheMessage == true) {
-    		attentionCheckpoint(g);
-    	}
-		
+		if (!Etat.init) {
+			//Herbe
+			g.setColor(new Color(50, 200, 50));
+			g.fillRect(0, HAUT/3, LARG, HAUT);
+			
+			etat.piste.drawPiste(g);
+			
+			background(g);
+			
+			//Horizon
+			g.setStroke(new BasicStroke(1));
+			g.setColor(Color.BLACK);
+			g.drawLine(0, HAUT/3, LARG, HAUT/3);
+			
+			etat.piste.drawDecors(g);
+			
+			if (etat.piste.isCheckpoint == true) {
+		    	etat.piste.dessineCheckpoint(g);
+		    }
+			
+			etat.vaisseau.drawVaisseau(g);
+			
+			if (!etat.isGameOver()) {
+				drawTraitAcceleration(g);
+			}
+			
+			etatTexte(g);
+			
+			if (etat.piste.afficheMessage == true) {
+	    		attentionCheckpoint(g);
+	    	}
+		} else {
+			drawLogo(g);
+		}
 		if (etat.isPause()) {
 			etat.menuActuel.draw(g);
 		}

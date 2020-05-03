@@ -29,23 +29,24 @@ public class Checkpoint extends Thread {
 	 * @param g 
 	 */
 	public void run() {
-		while (!etat.isPerdu()) {
-			if (etat.piste.waitCheck == false) {
-				etat.piste.debutCheckpoint();
-			}
-			if (etat.piste.afficheMessage == true) {
-				try {
-					Thread.sleep(3000);
-					etat.piste.afficheMessage = false;
-					etat.piste.isCheckpoint = true;
-					Thread.sleep(6000);
-					etat.piste.waitCheck = false;
-					etat.piste.isCheckpoint = false;
-					etat.piste.checked = false;
-					etat.piste.reinitialiseValeurs();
-					etat.piste.nouveauCheckpoint();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+		while (!etat.isQuit()) {
+			if (!etat.isPause() && !etat.isGameOver()) {
+				if (etat.piste.waitCheck == false) {
+					etat.piste.debutCheckpoint();
+				}
+				if (etat.piste.afficheMessage == true) {
+					try {
+						Thread.sleep(3000);
+						etat.piste.afficheMessage = false;
+						etat.piste.isCheckpoint = true;
+						Thread.sleep(10000);
+						etat.piste.waitCheck = false;
+						etat.piste.isCheckpoint = false;
+						etat.piste.reinitialiseValeurs();
+						etat.piste.nouveauCheckpoint();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			try {

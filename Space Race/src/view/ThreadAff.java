@@ -32,7 +32,7 @@ public class ThreadAff extends Thread {
 	 */
 	@Override
 	public void run() {
-		while (!etat.isPerdu()) {
+		while (!etat.isQuit()) {
 			if (draw) {
 				affichage.repaint();
 				draw = false;

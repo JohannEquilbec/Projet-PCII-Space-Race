@@ -27,8 +27,8 @@ public class Avancer extends Thread {
 	 */
 	@Override
 	public void run() {
-		while (!etat.isPerdu()) {
-			if (!etat.isPause()) {
+		while (!etat.isQuit()) {
+			if (!etat.isPause() && !etat.isGameOver()) {
 				etat.piste.avance(etat);
 				affi.redraw();
 			}

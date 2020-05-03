@@ -12,26 +12,35 @@ public class Etat {
 	public Vaisseau vaisseau = new Vaisseau(this);
 	public Piste piste = new Piste();
 	private ThreadAff affi;
-	private boolean pause = false;
+	public static boolean init = true;
+	private boolean pause = true;
 	public boolean quit = false;
 
 	//Défini le mode de vision du jeu
 	public static final boolean centrer = true;
-
+	
+	
 	//Listes des options dans les menus
+	private String[] listeMenuInit = {"Commencer", "Options", "Quitter"};
+	public Menu menuInit = new Menu("MenuInit", listeMenuInit, null);
+	
+	private String[] listeMenuOptionInit = {"Difficulte","Retour"};
+	public Menu menuOptionInit = new Menu("MenuOption", listeMenuOptionInit, menuInit);
+	
+	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Retour"};
+	public Menu menuDifficulte = new Menu("MenuDifficulte", listeMenuDifficulte, menuInit);
+	
+	
 	private String[] listeMenuPause = {"Reprendre", "Options", "Quitter"};
 	public Menu menuPause = new Menu("MenuPause", listeMenuPause, null);
 
-	private String[] listeMenuOption = {"Son","Skins","Retour"};
+	private String[] listeMenuOption = {"Skins","Retour"};
 	public Menu menuOption = new Menu("MenuOption", listeMenuOption, menuPause);
 
 	private String[] listeMenuSkin = {"Gris","Bleu","Vert","Rouge","Retour"};
 	public Menu menuSkin = new Menu("MenuSkin", listeMenuSkin, menuOption);
-	
-	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Démentiel", "Retour"};
-	public Menu menuDifficulte = new Menu("MenuDifficulté", listeMenuDifficulte, menuOption);
 
-	public Menu menuActuel = menuPause;
+	public Menu menuActuel = menuInit;
 
 	/**
 	 * Initialise l'affichage
@@ -39,6 +48,15 @@ public class Etat {
 	 */
 	public void setThreadAff(ThreadAff Taffi) {
 		affi = Taffi;
+	}
+	
+	public void set() {
+		vaisseau = new Vaisseau(this);
+		piste = new Piste();
+		init = true;
+		pause = true;
+		quit = false;
+		menuActuel = menuInit;
 	}
 
 	/**
@@ -103,6 +121,13 @@ public class Etat {
 	 */
 	public boolean isPerdu() {
 		return vaisseau.isDead() || quit;
+	}
+	
+	public boolean isGameOver() {
+		if (vaisseau.isDead()) {
+			affi.redraw();
+		}
+		return vaisseau.isDead();
 	}
 
 	/**

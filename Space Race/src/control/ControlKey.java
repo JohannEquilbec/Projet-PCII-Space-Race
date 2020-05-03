@@ -52,10 +52,19 @@ public class ControlKey {
 						etat.shift();
 						// Si c'est Echap, on met en pause
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						etat.paused();
+						if (Etat.init) {
+							etat.quit();
+						} else {
+							etat.paused();
+						}
 						// Si c'est Entrer, on choicit dans le menu (pause si rien n'est affiché)
 					} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 						etat.choose();
+					}
+				}
+				if (etat.isGameOver()) {
+					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+						etat.set();
 					}
 				}
 				// Si le jeu doit quitter

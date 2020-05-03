@@ -16,12 +16,12 @@ public class Piste {
 	//Liste des points qui constituent la route
 	private ArrayList<Point> ligne = new ArrayList<Point>();
 	
-	//Liste des d√©cors sur la route
+	//Liste des dÈcors sur la route
 	private ArrayList<Decors> decors = new ArrayList<>();
 	
 	private static final Random rand = new Random();
 	
-	//Plus la valeur est petite, plus il y a de d√©cors
+	//Plus la valeur est petite, plus il y a de dÈcors
 	private static final int TauxApparitionDecors = 100;
 	
 	//Position de la pointe de la piste
@@ -31,7 +31,7 @@ public class Piste {
 	//Avancement
 	private int position = 0;
 	
-	//Caract√©ristiques de la route
+	//CaractÈristiques de la route
 	private int longueur_segment = 300;
 	private int tournant = 300;
 	
@@ -39,48 +39,53 @@ public class Piste {
 	private Point prev_line_position_raw = new Point(0,0);
 	
 	//Variables pour les checkpoints
-	public int prochainCheckpoint = 14000; // Le prochain checkpoint se trouve dans X pixels multipli√© par multDistance
+	public int prochainCheckpoint = 200; // Le prochain checkpoint se trouve dans X pixels multipliÈ par multDistance
 	public double multDistance = 1.8;  // Pour creer une courbe de progression de plus en plus dure
 
-	//A chaque passage de checkpoint, le joueur reprendra vieRecuperee secondes de jeu
-	public int vieRecuperee = 30;
-
-	//Variables de base pour la cr√©ation des checkpoints
-	public int posBaseAx = Affichage.LARG/2 - 10; //Abscisse du 1er point
-	public int posBaseAy = Affichage.HAUT/3;      //Ordonn√©e du 1er point
-	public int posBaseBx = Affichage.LARG/2 + 10; //Abscisse du 2√®me point
-	public int posBaseBy = Affichage.HAUT/3;      //ordonn√©e du 2√®me point
-
-	// Pour calculer la position du checkpoint
+	public int vieRecuperee = 50;
+	
+	//Variables de base pour la crÈation des checkpoints
+	public int posYCheckpoint = Affichage.HAUT / 3;
+	
 	public int position1 = 0;
 	public int position2 = 0;
-
+	
 	//public boolean checkFin = false;
 	public boolean waitCheck = false; // Pour ne pas reboucler debutCheckpoint dans le Thread
 	public boolean isCheckpoint = false; // Si un checkpoint doit apparaitre ou non
 	public boolean afficheMessage = false; // Si on affiche le message de prevention a l'ecran
-	public boolean firstCheckpoint = true; // Pour dessiner la premi√®re apparition du Checkpoint
-	public boolean checked = false; // True si le checkpoint courant a √©t√© collect√©, false par d√©faut
 	
 	/**
-	 * Cr√©e la ligne al√©atoirement
+	 * CrÈe la ligne alÈatoirement
 	 */
 	public Piste() {
+		x_current = Affichage.LARG/2;
+		y_current = Affichage.HAUT;
+		position = 0;
+		ligne = new ArrayList<Point>();
+		decors = new ArrayList<>();
+		prev_line_position = new Point(0,0);     
+		prev_line_position_raw = new Point(0,0); 
+		position1 = 0;
+		position2 = 0; 
+		waitCheck = false;
+		isCheckpoint = false; 
+		afficheMessage = false;
 		addPoint();
 	}
 	
 	/**
-	 * Ajoute un d√©cors
+	 * Ajoute un dÈcors
 	 */
 	public void addDecors() {
 		decors.add(new Decors(this, position - Affichage.HAUT/3, positionPiste(Affichage.HORIZON)));
 	}
 	
 	/**
-	 * Ajoute un point √† la ligne
+	 * Ajoute un point ‡ la ligne
 	 */
 	private void addPoint() {
-		//D√©finie la curvature
+		//DÈfinie la curvature
 		x_current += rand.nextInt(tournant) - tournant/2;
 		if (x_current < 50) {
 			x_current=50;
@@ -88,13 +93,13 @@ public class Piste {
 			x_current= Affichage.LARG - (Affichage.LARG/100 + Affichage.HAUT*17/60);
 		}
 		ligne.add(new Point(x_current, y_current));
-		//D√©finie la longueur du prochain segment
+		//DÈfinie la longueur du prochain segment
 		y_current -= rand.nextInt(longueur_segment/3) + longueur_segment;
 	}
 	
 	/**
 	 * Revoie les points visibles dans la fenetre et les avancent suivant la position
-	 * @return les points visibles dans la fenetre (sans d√©calage pour qu'ils soient centr√©s)
+	 * @return les points visibles dans la fenetre (sans dÈcalage pour qu'ils soient centrÈs)
 	 */
 	public ArrayList<Point> getRawParcours() {
 		ArrayList<Point> ligne_visible = new ArrayList<Point>();
@@ -120,9 +125,9 @@ public class Piste {
 	}
 	
 	/**
-	 * D√©cale le parcours pour que la piste soit √† l'horizon au centre
-	 * @param ligne_visible la ligne √† d√©caler
-	 * @return la piste d√©cal√©e
+	 * DÈcale le parcours pour que la piste soit ‡ l'horizon au centre
+	 * @param ligne_visible la ligne ‡ dÈcaler
+	 * @return la piste dÈcalÈe
 	 */
 	public ArrayList<Point> decaleParcours(ArrayList<Point> ligne_visible) {
 		int centre = positionPiste(Affichage.HORIZON, true);
@@ -133,7 +138,7 @@ public class Piste {
 	}
 	
 	/**
-	 * Renvoi le parcours tel qu'il est vu √† l'√©cran
+	 * Renvoi le parcours tel qu'il est vu ‡ l'Ècran
 	 * @return
 	 */
 	public ArrayList<Point> getParcours() {
@@ -159,7 +164,7 @@ public class Piste {
 	public void avance(Etat etat) {
 		this.position += etat.vaisseau.vitesse/10;
 
-		//G√©n√©ration de d√©cors al√©atoire
+		//GÈnÈration de dÈcors alÈatoire
 		if (rand.nextInt(TauxApparitionDecors) == 0) {
 			addDecors();
 		}
@@ -180,11 +185,8 @@ public class Piste {
 			}
 		}
 
-		if (checked == false && isCheckpoint == true) {
-			int posBaseAx = positionPiste(posYCheckpoint) - taillePiste(posYCheckpoint)*3/4;
-			int posBaseBx = positionPiste(posYCheckpoint) + taillePiste(posYCheckpoint)*3/4;
-			crossCheckpoint(etat.vaisseau.x, etat.vaisseau.y, etat.vaisseau.x + Vaisseau.LARG, etat.vaisseau.y + Vaisseau.HAUT, posBaseAx, posYCheckpoint, posBaseBx, posYCheckpoint, etat);
-			//crossCheckpoint((Affichage.LARG/2) - 100, Affichage.HAUT - 150, (Affichage.LARG/2) + 100, Affichage.HAUT - 150, posBaseAx, posBaseAy, posBaseBx, posBaseBy, etat);
+		if (isCheckpoint == true) {
+			crossCheckpoint(etat);
 		}
 	}
 	
@@ -202,15 +204,15 @@ public class Piste {
 			Point i0 = new Point(parcours.get(i).x, parcours.get(i).y);
 			Point i1 = new Point(parcours.get(i+1).x, parcours.get(i+1).y);
 			
-			//Caclule la partie gauche de la piste √† afficher
+			//Caclule la partie gauche de la piste ‡ afficher
 			int x1_haut = i0.x - (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
 			int x1_bas = i1.x - (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
 			
-			//Caclule la partie droite de la piste √† afficher
+			//Caclule la partie droite de la piste ‡ afficher
 			int x2_haut = i0.x + (Affichage.LARG/100 + (i0.y - Affichage.HAUT/3)/2)/2;
 			int x2_bas = i1.x + (Affichage.LARG/100 + (i1.y - Affichage.HAUT/3)/2)/2;
 			
-			//Trace les pav√©s
+			//Trace les pavÈs
 			g.setColor(Color.LIGHT_GRAY);
 			g.setStroke(new BasicStroke(1));
 			int[] x = {x1_haut, x1_bas, x2_bas, x2_haut};
@@ -233,7 +235,7 @@ public class Piste {
 		}
 	}
 		
-		//Test sur la position de la piste √† l'horizon (debug)
+		//Test sur la position de la piste ‡ l'horizon (debug)
 		/*g.setStroke(new BasicStroke(2));
 		g.setColor(Color.RED);
 		int x = Affichage.HORIZON;
@@ -284,6 +286,7 @@ public class Piste {
 		g.setStroke(new BasicStroke(8));
 		int posBaseAx = positionPiste(posYCheckpoint) - taillePiste(posYCheckpoint)*3/4;
 		int posBaseBx = positionPiste(posYCheckpoint) + taillePiste(posYCheckpoint)*3/4;
+		System.out.println(posBaseAx + " " + posBaseBx);
 
 		position2 = position1;
 		position1 = position;
@@ -299,44 +302,27 @@ public class Piste {
 		etat.vaisseau.vie += vieRecuperee;
 	}
 	
-	public int getVieRecuperee() {
-		return vieRecuperee;
-	}
-
-	public void setVieRecuperee(int vieRecuperee) {
-		this.vieRecuperee = vieRecuperee;
-	}
-
-	public void reinitialiseValeurs() {
-		posBaseAx = Affichage.LARG/2 - 10;
-		posBaseAy = Affichage.HAUT/3;
-		posBaseBx = Affichage.LARG/2 + 10;
-		posBaseBy = Affichage.HAUT/3;
-	}
-	
-	public void crossCheckpoint(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Etat etat) {
-		if (etat.vaisseau.y >= (Affichage.HAUT/2) && (((x3 - x1)*(y2 - y1)-(y3 - y1)*(x2 - x1))*((x4 - x1)*(y2 - y1)-(y4 - y1)*(x2 - x1))) < 0 && (((x1 - x3)*(y4 - y3)-(y1 - y3)*(x4 - x3))*((x2 - x3)*(y4 - y3)-(y2 - y3)*(x4 - x3))) < 0) {
+	public void crossCheckpoint(Etat etat) {
+		int posBaseAx = positionPiste(posYCheckpoint) - taillePiste(posYCheckpoint)*3/4;
+		int posBaseBx = positionPiste(posYCheckpoint) + taillePiste(posYCheckpoint)*3/4;
+		if (posYCheckpoint >= (Affichage.SOL-Affichage.HAUT/10) && etat.vaisseau.y >= (Affichage.HAUT*3/2) && (etat.vaisseau.x + Vaisseau.LARG > posBaseAx && etat.vaisseau.x < posBaseBx)) {
 			checkpointCrossed(etat);
-			checked = true;
+			isCheckpoint = false;
+		}
+		if (posYCheckpoint > Affichage.HAUT) {
+			isCheckpoint = false;
 		}
 	}
 
 	public void changeDifficulte(String diff) {
 		if (diff == "Facile") {
 			setMultDistance(1.2);
-			setVieRecuperee(30);
 		}
 		if (diff == "Normal") {
 			setMultDistance(1.8);
-			setVieRecuperee(30);
 		}
 		if (diff == "Difficile") {
 			setMultDistance(5.0);
-			setVieRecuperee(30);
-		}
-		if (diff == "D√©mentiel") {
-			setMultDistance(10.0);
-			setVieRecuperee(10);
 		}
 	}
 	
@@ -350,12 +336,16 @@ public class Piste {
 	public void nouveauCheckpoint() {
 		prochainCheckpoint += prochainCheckpoint * multDistance;
 	}
+	
+	public void reinitialiseValeurs() {
+		this.posYCheckpoint = Affichage.HAUT / 3;
+	}
 
 	//////////// FIN CHECKPOINT /////////////////
 		
 	
 	/**
-	 * Dessine les d√©cors
+	 * Dessine les dÈcors
 	 * @param g {@link Graphics2D}
 	 */
 	public void drawDecors(Graphics2D g) {	
@@ -400,8 +390,8 @@ public class Piste {
 	}
 	
 	/**
-	 * Calcule la position de la piste au y donn√© (tel qu'affich√©)
-	 * @param y l'endoit o√π regarder la position de la piste
+	 * Calcule la position de la piste au y donnÈ (tel qu'affichÈ)
+	 * @param y l'endoit o˘ regarder la position de la piste
 	 * @return la position x de la piste
 	 */
 	public int positionPiste(int y) {
@@ -422,9 +412,9 @@ public class Piste {
 	}
 	
 	/**
-	 * Calcule la position de la piste au y donn√©
-	 * @param y l'endoit o√π regarder la position de la piste
-	 * @param raw si on doit prendre en compte le d√©calage centrer
+	 * Calcule la position de la piste au y donnÈ
+	 * @param y l'endoit o˘ regarder la position de la piste
+	 * @param raw si on doit prendre en compte le dÈcalage centrer
 	 * @return la position x de la piste
 	 */
 	private int positionPiste(int y, boolean raw) {
@@ -453,12 +443,12 @@ public class Piste {
 	}
 	
 	/**
-	 * Calcule la taille de la piste au y donn√©
-	 * @param y le y o√π calculer la taille
+	 * Calcule la taille de la piste au y donnÈ
+	 * @param y le y o˘ calculer la taille
 	 * @return la taille de la piste
 	 */
 	public int taillePiste(int y) {
-		//TODO sur-√©valu√© de 1/3 (d'o√π le * 2/3)
+		//TODO sur-ÈvaluÈ de 1/3 (d'o˘ le * 2/3)
 		return (Affichage.LARG/100 + (y - Affichage.HAUT/3)/2) * 2 /3;
 	}
 }

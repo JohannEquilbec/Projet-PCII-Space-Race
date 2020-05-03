@@ -1,7 +1,5 @@
 package jeu;
 
-import javax.swing.JFrame;
-
 import control.ControlKey;
 import modele.Etat;
 import view.Affichage;
@@ -18,7 +16,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		//Nouvelle fenetre
-		JFrame fenetre = Fenetre.newJFrame();
+		Fenetre fenetre = new Fenetre();
 		Etat etat = new Etat();
 		Affichage affichage = new Affichage(etat);
 		
@@ -28,11 +26,11 @@ public class Main {
 		//Assembler
 		fenetre.pack();
 		
-		//Ajoute les controles
-		new ControlKey(fenetre, etat);
-		
 		ThreadAff affi = new ThreadAff(affichage, etat);
 		etat.setThreadAff(affi);
+		
+		//Ajoute les controles
+		new ControlKey(fenetre, etat);
 		
 		//Lancement des threads
 		affi.start();

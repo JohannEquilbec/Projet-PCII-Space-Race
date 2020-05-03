@@ -63,6 +63,10 @@ public class Menu {
 		//Si on selectionne Reprendre, le jeu reprend
 		} else if (selection == "Reprendre") {
 			etat.paused();
+		} else if (selection == "Commencer") {
+			Etat.init = false;
+			etat.changeMenuActuel(etat.menuPause);
+			etat.paused();
 		//Si on selectionne Quitter, on quitte le jeu
 		} else if (selection == "Quitter") {
 			etat.quit = true;
@@ -72,19 +76,28 @@ public class Menu {
 		if (nomMenu == "MenuPause") {
 			if (selection == "Options") {
 				etat.changeMenuActuel(etat.menuOption);
-			} 
+			}
+			
+		} else if (nomMenu == "MenuInit") {
+			if (selection == "Options") {
+				etat.changeMenuActuel(etat.menuOptionInit);
+			}
+			
 		} else if (nomMenu == "MenuOption") {
 			if (selection == "Son") {
 
 			} else if (selection == "Skins") {
 				etat.changeMenuActuel(etat.menuSkin);
-			} else if (selection == "Difficulté") {
+			} else if (selection == "Difficulte") {
 				etat.changeMenuActuel(etat.menuDifficulte);
 			}
+			
 		} else if (nomMenu == "MenuSkin") {
 			etat.vaisseau.setSkin(choixMenu[choix_menu]);
-		} else if (nomMenu == "MenuDifficulté") {
-			etat.piste.changeDifficulte(choixMenu[choix_menu]);;
+			
+		} else if (nomMenu == "MenuDifficulte") {
+			etat.piste.changeDifficulte(choixMenu[choix_menu]);
+			etat.changeMenuActuel(menuParent);
 		}
 
 	}
