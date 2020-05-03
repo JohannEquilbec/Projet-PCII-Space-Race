@@ -43,7 +43,7 @@ public class Piste {
 	public double multDistance = 1.8;  // Pour creer une courbe de progression de plus en plus dure
 
 	//A chaque passage de checkpoint, le joueur reprendra vieRecuperee secondes de jeu
-	public int vieRecuperee = 50;
+	public int vieRecuperee = 30;
 
 	//Variables de base pour la création des checkpoints
 	public int posBaseAx = Affichage.LARG/2 - 10; //Abscisse du 1er point
@@ -324,19 +324,19 @@ public class Piste {
 	public void changeDifficulte(String diff) {
 		if (diff == "Facile") {
 			setMultDistance(1.2);
-			setVieRecuperee(50);
+			setVieRecuperee(30);
 		}
 		if (diff == "Normal") {
 			setMultDistance(1.8);
-			setVieRecuperee(50);
+			setVieRecuperee(30);
 		}
 		if (diff == "Difficile") {
 			setMultDistance(5.0);
-			setVieRecuperee(50);
+			setVieRecuperee(30);
 		}
 		if (diff == "Démentiel") {
 			setMultDistance(10.0);
-			setVieRecuperee(20);
+			setVieRecuperee(10);
 		}
 	}
 	
