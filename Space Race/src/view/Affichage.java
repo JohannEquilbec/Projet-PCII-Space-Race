@@ -111,6 +111,7 @@ public class Affichage extends JPanel {
 		g.drawString("GAME OVER", LARG/2-(LARG+HAUT)/9, HAUT/3);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, (LARG+HAUT)/40));
 		g.drawString("Score : "+Integer.toString(etat.piste.getPosition()/100), LARG/2-(LARG+HAUT)/15, HAUT/3+(LARG+HAUT)/20);
+		g.setColor(Color.BLACK);
 		g.drawString("Appuyez sur ECHAP pour revenir au menu", LARG/2-(LARG+HAUT)/5, HAUT/3+(LARG+HAUT)/20 + (LARG+HAUT)/20);
 	}
 	
