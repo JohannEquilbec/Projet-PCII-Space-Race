@@ -42,25 +42,18 @@ public class Piste {
 	public int prochainCheckpoint = 14000; // Le prochain checkpoint se trouve dans X pixels multiplié par multDistance
 	public double multDistance = 1.8;  // Pour creer une courbe de progression de plus en plus dure
 
-	//A chaque passage de checkpoint, le joueur reprendra vieRecuperee secondes de jeu
 	public int vieRecuperee = 30;
-
+	
 	//Variables de base pour la création des checkpoints
-	public int posBaseAx = Affichage.LARG/2 - 10; //Abscisse du 1er point
-	public int posBaseAy = Affichage.HAUT/3;      //Ordonnée du 1er point
-	public int posBaseBx = Affichage.LARG/2 + 10; //Abscisse du 2ème point
-	public int posBaseBy = Affichage.HAUT/3;      //ordonnée du 2ème point
-
-	// Pour calculer la position du checkpoint
+	public int posYCheckpoint = Affichage.HAUT / 3;
+	
 	public int position1 = 0;
 	public int position2 = 0;
-
+	
 	//public boolean checkFin = false;
 	public boolean waitCheck = false; // Pour ne pas reboucler debutCheckpoint dans le Thread
 	public boolean isCheckpoint = false; // Si un checkpoint doit apparaitre ou non
 	public boolean afficheMessage = false; // Si on affiche le message de prevention a l'ecran
-	public boolean firstCheckpoint = true; // Pour dessiner la première apparition du Checkpoint
-	public boolean checked = false; // True si le checkpoint courant a été collecté, false par défaut
 	
 	/**
 	 * Crée la ligne aléatoirement
@@ -321,12 +314,19 @@ public class Piste {
 	public void changeDifficulte(String diff) {
 		if (diff == "Facile") {
 			setMultDistance(1.2);
+			setVieRecuperee(30);
 		}
 		if (diff == "Normal") {
 			setMultDistance(1.8);
+			setVieRecuperee(30);
 		}
 		if (diff == "Difficile") {
 			setMultDistance(5.0);
+			setVieRecuperee(30);
+		}
+		if (diff == "Démentiel") {
+			setMultDistance(10.0);
+			setVieRecuperee(10);
 		}
 	}
 	
