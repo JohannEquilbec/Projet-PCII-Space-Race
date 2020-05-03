@@ -39,7 +39,7 @@ public class Checkpoint extends Thread {
 						Thread.sleep(3000);
 						etat.piste.afficheMessage = false;
 						etat.piste.isCheckpoint = true;
-						Thread.sleep(10000);
+						Thread.sleep(6000);
 						etat.piste.waitCheck = false;
 						etat.piste.isCheckpoint = false;
 						etat.piste.reinitialiseValeurs();
