@@ -28,7 +28,7 @@ public class Etat {
 	private String[] listeMenuSkin = {"Gris","Bleu","Vert","Rouge","Retour"};
 	public Menu menuSkin = new Menu("MenuSkin", listeMenuSkin, menuOption);
 	
-	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Retour"};
+	private String[] listeMenuDifficulte = {"Facile", "Normal", "Difficile", "Démentiel", "Retour"};
 	public Menu menuDifficulte = new Menu("MenuDifficulté", listeMenuDifficulte, menuOption);
 
 	public Menu menuActuel = menuPause;
