@@ -20,13 +20,13 @@ import modele.Etat;
  */
 public class Affichage extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public final static boolean fullscreen = true;
+	public final static boolean fullscreen = false;
 	private final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public Random rand = new Random();
 	
 	//Constantes
-	public final static int LARG = fullscreen ? screenSize.width : 1000;
-	public final static int HAUT = fullscreen ? screenSize.height : 1000;
+	public final static int LARG = fullscreen ? screenSize.width : 1500;
+	public final static int HAUT = fullscreen ? screenSize.height : 800;
 	public final static int DIAGO = (int) Math.sqrt(Math.pow(Affichage.HAUT, 2) + Math.pow(Affichage.LARG, 2));
 	public final static int SOL = HAUT*9/10;
 	public final static int HORIZON = HAUT/3;
@@ -232,7 +232,7 @@ public class Affichage extends JPanel {
 			
 			etat.piste.drawDecors(g);
 			
-			if (etat.piste.isCheckpoint == true) {
+			if (etat.piste.isCheckpoint) {
 		    	etat.piste.dessineCheckpoint(g);
 		    }
 			

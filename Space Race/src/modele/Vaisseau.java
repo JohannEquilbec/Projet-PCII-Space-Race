@@ -49,7 +49,7 @@ public class Vaisseau {
 	 */
 	public Vaisseau(Etat et) {
 		etat = et;
-		vie = 3;
+		vie = 89;
 		ThreadX = null;      
 		ThreadY = null;
 		vaVersX = false; 
