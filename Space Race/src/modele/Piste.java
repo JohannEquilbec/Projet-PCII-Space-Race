@@ -303,6 +303,10 @@ public class Piste {
 		g.setStroke(new BasicStroke(4));
 	}
 	
+	public void checkpointCrossed(Etat etat) {
+		etat.vaisseau.vie += vieRecuperee;
+	}
+	
 	public void crossCheckpoint(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Etat etat) {
 		if (etat.vaisseau.y >= (Affichage.HAUT/2) && (((x3 - x1)*(y2 - y1)-(y3 - y1)*(x2 - x1))*((x4 - x1)*(y2 - y1)-(y4 - y1)*(x2 - x1))) < 0 && (((x1 - x3)*(y4 - y3)-(y1 - y3)*(x4 - x3))*((x2 - x3)*(y4 - y3)-(y2 - y3)*(x4 - x3))) < 0) {
 			checkpointCrossed(etat);
